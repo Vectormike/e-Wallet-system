@@ -7,6 +7,7 @@ const paystack = require('paystack')(config.paystack);
 const User = require('../models/user.model');
 const Transaction = require('../models/transaction.model');
 const userService = require('./user.service');
+const transactionService = require('./transaction.service');
 const ApiError = require('../utils/ApiError');
 const logger = require('../config/logger');
 
@@ -110,7 +111,28 @@ const transfer = async (user, money, email) => {
   }
 };
 
+/**
+ *
+ * @param {string} user
+ * @param {string} money
+ * @returns {Promise<User>}
+ */
+
+const getTransactions = async (user) => {
+  try {
+    const foundUser = await userService.getUserById(user.id);
+    if (!foundUser) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, `User not found`);
+    }
+    const { operation, amount, transactionId } = await Transaction.findById(user.id);
+    return { amount, operation, transactionId };
+  } catch (error) {
+    logger.error(error);
+  }
+};
+
 module.exports = {
   deposit,
   transfer,
+  getTransactions,
 };

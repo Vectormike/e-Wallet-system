@@ -20,7 +20,17 @@ const transfer = catchAsync(async (req, res) => {
   res.status(httpStatus.ACCEPTED).json(transferResponse);
 });
 
+/**
+ * eWallet Transactions
+ * @public
+ */
+const getTransactions = catchAsync(async (req, res) => {
+  const transferResponse = await transactionService.getTransactions(req.user);
+  res.status(httpStatus.ACCEPTED).json(transferResponse);
+});
+
 module.exports = {
   deposit,
   transfer,
+  getTransactions,
 };

@@ -6,5 +6,6 @@ const router = express.Router();
 
 router.post('/deposit', auth('user'), transactionController.deposit);
 router.post('/transfer', auth('user'), transactionController.transfer);
+router.post('/transactions', auth('user'), transactionController.getTransactions);
 
 module.exports = router;
